@@ -1,4 +1,4 @@
-import { RouterApp } from "./router/RouterApp"
+import { RouterApp } from './router/RouterApp';
 
 
 export const AppGisa = () => {
