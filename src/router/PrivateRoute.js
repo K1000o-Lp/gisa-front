@@ -8,5 +8,5 @@ export const PrivateRoute = ({ children }) => {
 
   return authState.logged ?
     children :
-    <Navigate to='login' />
+    <Navigate to='/login' />
 }

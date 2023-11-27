@@ -9,16 +9,15 @@ import {
   makeStyles
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'OATI Desarrollo © '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { useForm } from '../../hooks/useForm';
+import { login } from '../../actions/auth.actions';
+import { CopyRight } from '../ui/CopyRight';
+
+
 
 const useStyles = makeStyles((theme) => ({
   screen: {
@@ -47,6 +46,23 @@ const useStyles = makeStyles((theme) => ({
 
 export const LoginScreen = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const authState = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  const [valuesForm, handleInputChange, reset] = useForm();
+
+  const { user, error } = authState;
+  const { username, password } = valuesForm;
+
+  const handleSubtmit = (e) => {
+    e.preventDefault();
+
+    dispatch(login(username, password));
+  }
+
+  useEffect(() => {
+    user != null && navigate('/home', { replace: true });
+  }, [user])
 
   return (
     <div className={classes.screen}>
@@ -59,7 +75,7 @@ export const LoginScreen = () => {
           <Typography component="h1" variant="h5">
             Iniciar Sesión
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={handleSubtmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -68,6 +84,9 @@ export const LoginScreen = () => {
               label="Usuario"
               name="username"
               autoFocus
+              error={error?.validation}
+              onChange={handleInputChange}
+              value={username}
             />
 
             <TextField
@@ -78,6 +97,10 @@ export const LoginScreen = () => {
               label="Contraseña"
               type="password"
               id="password"
+              error={error?.validation}
+              helperText={error?.message}
+              onChange={handleInputChange}
+              value={password}
             />
 
             <Button
@@ -92,7 +115,7 @@ export const LoginScreen = () => {
           </form>
         </div>
         <Box mt={8}>
-          <Copyright />
+          <CopyRight />
         </Box>
       </Container>
     </div>
