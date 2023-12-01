@@ -1,60 +1,21 @@
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  Box,
-  Typography,
-  Container,
-  makeStyles
-} from '@material-ui/core';
-import { LockOutlined } from '@material-ui/icons';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Alert, Button, Card, Container, Form, InputGroup, Row } from 'react-bootstrap';
 
 import { useForm } from '../../hooks/useForm';
 import { login } from '../../actions/auth.actions';
-import { CopyRight } from '../ui/CopyRight';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  screen: {
-    height: '100vh',
-    width: '100vw',
-    flex: 3,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export const LoginScreen = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
   const authState = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  const [valuesForm, handleInputChange, reset] = useForm();
+  const [valuesForm, handleInputChange] = useForm();
 
   const { user, error } = authState;
   const { username, password } = valuesForm;
 
-  const handleSubtmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     dispatch(login(username, password));
@@ -65,59 +26,78 @@ export const LoginScreen = () => {
   }, [user])
 
   return (
-    <div className={classes.screen}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Iniciar Sesión
-          </Typography>
-          <form className={classes.form} onSubmit={handleSubtmit}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="username"
-              label="Usuario"
-              name="username"
-              autoFocus
-              error={error?.validation}
-              onChange={handleInputChange}
-              value={username}
-            />
+    <Container>
+      <Row
+        className='justify-content-center align-items-center'
+        style={{
+          height: '100vh',
+        }}
+      >
+        <Card
+          style={{
+            minWidth: 400
+          }}
+        >
+          <Card.Header>
+            Inicia Sesión
+          </Card.Header>
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Contraseña"
-              type="password"
-              id="password"
-              error={error?.validation}
-              helperText={error?.message}
-              onChange={handleInputChange}
-              value={password}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
+          <Card.Title>
+            <div
+              className='d-flex justify-content-center m-3'
             >
-              Acceder
-            </Button>
-          </form>
-        </div>
-        <Box mt={8}>
-          <CopyRight />
-        </Box>
-      </Container>
-    </div>
+              Aquí Icono
+            </div>
+          </Card.Title>
+
+          <Card.Body>
+            {
+              error?.validation
+              && (
+                <Alert variant='danger'>
+                  {error.message}
+                </Alert>
+              )
+            }
+
+            <Form onSubmit={handleSubmit}>
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1" className='material-icons'>person</InputGroup.Text>
+                <Form.Control
+                  placeholder="Usuario"
+                  aria-label="Usuario"
+                  aria-describedby="basic-addon1"
+                  name='username'
+                  value={username}
+                  onChange={handleInputChange}
+                />
+              </InputGroup>
+
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon2" className='material-icons'>lock</InputGroup.Text>
+                <Form.Control
+                  placeholder="Contraseña"
+                  aria-label="Contraseña"
+                  aria-describedby="basic-addon2"
+                  type='password'
+                  name='password'
+                  value={password}
+                  onChange={handleInputChange}
+                />
+              </InputGroup>
+
+              <Button
+                className='btn-block'
+                type='submit'
+                variant='primary'
+                size='lg'
+              >
+                Acceder
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Row>
+    </Container>
   );
 }

@@ -24,7 +24,7 @@ export const login = (username, password) => {
         type: LOGIN_FAILURE,
         payload: {
           validation: true,
-          message: 'Usuario y/o contraseña son incorrectos',
+          message: 'Usuario y/o contraseña son requeridos',
         }
       });
     }

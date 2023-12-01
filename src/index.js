@@ -5,6 +5,8 @@ import { store } from './store';
 
 import { AppGisa } from './AppGisa';
 
+import './styles/sass/custom.scss';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
